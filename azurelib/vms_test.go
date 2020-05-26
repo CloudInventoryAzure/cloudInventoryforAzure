@@ -9,6 +9,7 @@ import (
 
 const subscriptionID = "282160c0-3c83-43f1-bff1-9356b1678ffb"
 
+//GetAuthorizedclients returns authorized network interface,publicIPaddress and virtualmachine clients
 func GetAuthorizedclients(subscriptionID string) (client Clients, err error) {
         clients := GetNewClients(subscriptionID)
         client, err = AuthorizeClients(clients)
