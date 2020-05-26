@@ -7,19 +7,25 @@ import (
         "time"
 )
 
+const subscriptionID = "282160c0-3c83-43f1-bff1-9356b1678ffb"
+const autorizationError = "Failed to authorize: %v"
+const getallVmserror = "Failed to  get all VMs: %v"
+const networkInterfaceerror = "Failed to  get the network interface of Vm  %v : %v"
+const resourceGrouperror = "Failed to  get resource group of VM %v : %v"
+
 //TestGetallVMS tests function TestGetallVMS
 func TestGetallVMS(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
+
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
         Vmlist, err := GetallVMS(client, ctx)
         if err != nil {
-                t.Errorf("Failed to  get all VMs: %v", err)
+                t.Errorf(getallVmserror, err)
         } else {
                 t.Logf("GetallVMS successful")
                 fmt.Println(Vmlist)
@@ -28,11 +34,10 @@ func TestGetallVMS(t *testing.T) {
 
 //TestGetVmnetworkinterface tests function GetVmnetworkinterface
 func TestGetVmnetworkinterface(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
@@ -43,7 +48,7 @@ func TestGetVmnetworkinterface(t *testing.T) {
         for i := 0; i < len(Vmlist); i++ {
                 networkInterface, err := GetVmnetworkinterface(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get the network interface of Vm  %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(networkInterfaceerror, *Vmlist[i].Name, err)
                 } else {
                         t.Logf("GetVmnetworkinterface successful  Vm name and its network interface  %v : %v", *Vmlist[i].Name, networkInterface)
                 }
@@ -52,26 +57,25 @@ func TestGetVmnetworkinterface(t *testing.T) {
 
 //TestGetPrivateIP tests function GetPrivateIP
 func TestGetPrivateIP(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
         Vmlist, err := GetallVMS(client, ctx)
         if err != nil {
-                t.Errorf("Failed to  get all VMs: %v", err)
+                t.Errorf(getallVmserror, err)
         }
         for i := 0; i < len(Vmlist); i++ {
                 networkInterface, err := GetVmnetworkinterface(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get the network interface of Vm  %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(networkInterfaceerror, *Vmlist[i].Name, err)
                 }
                 resourceGroup, err := GetVMResourcegroup(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get resource group of VM %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(resourceGrouperror, *Vmlist[i].Name, err)
                 }
                 privateIPaddress, IPconfig, err := GetPrivateIP(client, ctx, resourceGroup, networkInterface, "")
                 if err != nil {
@@ -84,27 +88,26 @@ func TestGetPrivateIP(t *testing.T) {
 
 //TestGetPublicIPAddress tests function GetPublicIPAddress
 func TestGetPublicIPAddress(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
         Vmlist, err := GetallVMS(client, ctx)
         if err != nil {
-                t.Errorf("Failed to  get all VMs: %v", err)
+                t.Errorf(getallVmserror, err)
         }
         for i := 0; i < len(Vmlist); i++ {
                 networkInterface, err := GetVmnetworkinterface(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get the network interface of Vm  %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(networkInterfaceerror, *Vmlist[i].Name, err)
                 }
 
                 resourceGroup, err := GetVMResourcegroup(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get resource group of VM %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(resourceGrouperror, *Vmlist[i].Name, err)
                 }
                 publicIPname, err := GetPublicIPAddressID(client, ctx, resourceGroup, networkInterface, "")
                 if err != nil {
@@ -121,26 +124,25 @@ func TestGetPublicIPAddress(t *testing.T) {
 
 //TestGetSubnetandvirtualnetwork tests the function GetSubnetandvirtualnetwork
 func TestGetSubnetandvirtualnetwork(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
         Vmlist, err := GetallVMS(client, ctx)
         if err != nil {
-                t.Errorf("Failed to  get all VMs: %v", err)
+                t.Errorf(getallVmserror, err)
         }
         for i := 0; i < len(Vmlist); i++ {
                 networkInterface, err := GetVmnetworkinterface(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get the network interface of Vm  %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(networkInterfaceerror, *Vmlist[i].Name, err)
                 }
                 resourceGroup, err := GetVMResourcegroup(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get resource group of VM %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(resourceGrouperror, *Vmlist[i].Name, err)
                 }
                 subnetAndvirtualnetwork, err := GetSubnetandvirtualnetwork(client, ctx, resourceGroup, networkInterface, "")
                 if err != nil {
@@ -153,27 +155,26 @@ func TestGetSubnetandvirtualnetwork(t *testing.T) {
 
 //TestGetDNS tests the function GetDNS
 func TestGetDNS(t *testing.T) {
-        subscriptionID := "282160c0-3c83-43f1-bff1-9356b1678ffb"
         clients := GetNewClients(subscriptionID)
         client, err := AuthorizeClients(clients)
         if err != nil {
-                t.Errorf("Failed to authorize: %v", err)
+                t.Errorf(autorizationError, err)
         }
         ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
         defer cancel()
         Vmlist, err := GetallVMS(client, ctx)
         if err != nil {
-                t.Errorf("Failed to  get all VMs: %v", err)
+                t.Errorf(getallVmserror, err)
         }
         for i := 0; i < len(Vmlist); i++ {
                 networkInterface, err := GetVmnetworkinterface(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get the network interface of Vm  %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(networkInterfaceerror, *Vmlist[i].Name, err)
                 }
 
                 resourceGroup, err := GetVMResourcegroup(Vmlist[i])
                 if err != nil {
-                        t.Errorf("Failed to  get resource group of VM %v : %v", *Vmlist[i].Name, err)
+                        t.Errorf(resourceGrouperror, *Vmlist[i].Name, err)
                 }
                 publicIPname, err := GetPublicIPAddressID(client, ctx, resourceGroup, networkInterface, "")
                 if err != nil {
