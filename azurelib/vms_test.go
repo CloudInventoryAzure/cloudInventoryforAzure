@@ -13,11 +13,16 @@ const getallVmserror = "Failed to  get all VMs: %v"
 const networkInterfaceerror = "Failed to  get the network interface of Vm  %v : %v"
 const resourceGrouperror = "Failed to  get resource group of VM %v : %v"
 
+func GetAuthorizedclients(subscriptionID string) (client Clients, err error) {
+        clients := GetNewClients(subscriptionID)
+        client, err = AuthorizeClients(clients)
+        return
+}
+
 //TestGetallVMS tests function TestGetallVMS
 func TestGetallVMS(t *testing.T) {
 
-        clients := GetNewClients(subscriptionID)
-        client, err := AuthorizeClients(clients)
+        client, err := GetAuthorizedclients(subscriptionID)
         if err != nil {
                 t.Errorf(autorizationError, err)
         }
@@ -34,8 +39,7 @@ func TestGetallVMS(t *testing.T) {
 
 //TestGetVmnetworkinterface tests function GetVmnetworkinterface
 func TestGetVmnetworkinterface(t *testing.T) {
-        clients := GetNewClients(subscriptionID)
-        client, err := AuthorizeClients(clients)
+        client, err := GetAuthorizedclients(subscriptionID)
         if err != nil {
                 t.Errorf(autorizationError, err)
         }
@@ -57,8 +61,7 @@ func TestGetVmnetworkinterface(t *testing.T) {
 
 //TestGetPrivateIP tests function GetPrivateIP
 func TestGetPrivateIP(t *testing.T) {
-        clients := GetNewClients(subscriptionID)
-        client, err := AuthorizeClients(clients)
+        client, err := GetAuthorizedclients(subscriptionID)
         if err != nil {
                 t.Errorf(autorizationError, err)
         }
@@ -88,8 +91,7 @@ func TestGetPrivateIP(t *testing.T) {
 
 //TestGetPublicIPAddress tests function GetPublicIPAddress
 func TestGetPublicIPAddress(t *testing.T) {
-        clients := GetNewClients(subscriptionID)
-        client, err := AuthorizeClients(clients)
+        client, err := GetAuthorizedclients(subscriptionID)
         if err != nil {
                 t.Errorf(autorizationError, err)
         }
@@ -124,8 +126,7 @@ func TestGetPublicIPAddress(t *testing.T) {
 
 //TestGetSubnetandvirtualnetwork tests the function GetSubnetandvirtualnetwork
 func TestGetSubnetandvirtualnetwork(t *testing.T) {
-        clients := GetNewClients(subscriptionID)
-        client, err := AuthorizeClients(clients)
+        client, err := GetAuthorizedclients(subscriptionID)
         if err != nil {
                 t.Errorf(autorizationError, err)
         }
